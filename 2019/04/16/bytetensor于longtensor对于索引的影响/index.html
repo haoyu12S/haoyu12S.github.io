@@ -96,24 +96,25 @@
 
 
 
-  <meta name="description" content="Make it come true.">
-<meta name="keywords" content="SSS_haoyu">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SSS">
-<meta property="og:url" content="https://haoyu12s.github.io/categories/machine-learning/index.html">
+  <meta name="description" content="今天发现pytorch里， bytetensor(torch.uint8)和longtensor(torch.long)对于索引有不同的影响">
+<meta name="keywords" content="pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bytetensor于longtensor对于索引的影响">
+<meta property="og:url" content="https://haoyu12s.github.io/2019/04/16/bytetensor于longtensor对于索引的影响/index.html">
 <meta property="og:site_name" content="SSS">
-<meta property="og:description" content="Make it come true.">
+<meta property="og:description" content="今天发现pytorch里， bytetensor(torch.uint8)和longtensor(torch.long)对于索引有不同的影响">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-16T21:42:21.574Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SSS">
-<meta name="twitter:description" content="Make it come true.">
+<meta name="twitter:title" content="bytetensor于longtensor对于索引的影响">
+<meta name="twitter:description" content="今天发现pytorch里， bytetensor(torch.uint8)和longtensor(torch.long)对于索引有不同的影响">
 
 
 
 
 
 
-  <link rel="canonical" href="https://haoyu12s.github.io/categories/machine-learning/"/>
+  <link rel="canonical" href="https://haoyu12s.github.io/2019/04/16/bytetensor于longtensor对于索引的影响/"/>
 
 
 
@@ -123,7 +124,7 @@
   };
 </script>
 
-  <title>title.category: machine-learning | SSS</title>
+  <title>bytetensor于longtensor对于索引的影响 | SSS</title>
   
 
 
@@ -171,7 +172,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -264,7 +265,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
 
     
     
@@ -323,85 +324,190 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>machine-learning<small>title.category</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/04/16/bytetensor于longtensor对于索引的影响/"/>
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haoyu"/>
+      <meta itemprop="description" content="Make it come true."/>
+      <meta itemprop="image" content="/images/photo.jpg"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SSS"/>
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2018/06/04/Install-Anaconda/" itemprop="url">
-            
-              <span itemprop="name">Install Anaconda</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">bytetensor于longtensor对于索引的影响
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-06-04T22:06:06-05:00"
-              content="2018-06-04">
-          06-04
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">post.posted</span>
+              
+
+              
+                
+              
+
+              <time title="post.createdsymbol.colon2019-04-16 16:31:46 / post.modifiedsymbol.colon16:42:21" itemprop="dateCreated datePublished" datetime="2019-04-16T16:31:46-05:00">2019-04-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             post.viewssymbol.colon 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天发现pytorch里， bytetensor(torch.uint8)和longtensor(torch.long)对于索引有不同的影响</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">boxes = torch.randint(<span class="number">6</span>, (<span class="number">3</span>,<span class="number">4</span>))</span><br><span class="line">boxes</span><br><span class="line"><span class="comment">#tensor([[0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#        [1., 4., 5., 2.],</span></span><br><span class="line"><span class="comment">#        [5., 5., 1., 5.]])</span></span><br><span class="line">mask1 = torch.tensor([<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>], dtype=torch.long).view(<span class="number">-1</span>,<span class="number">1</span>)</span><br><span class="line">mask2 = torch.tensor([<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>], dtype=torch.uint8).view(<span class="number">-1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">boxes[mask1.expand_as(boxes)]</span><br><span class="line"><span class="comment">#tensor([[[0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#         [0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#         [0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#         [0., 4., 1., 1.]],</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#        [[1., 4., 5., 2.],</span></span><br><span class="line"><span class="comment">#         [1., 4., 5., 2.],</span></span><br><span class="line"><span class="comment">#         [1., 4., 5., 2.],</span></span><br><span class="line"><span class="comment">#         [1., 4., 5., 2.]],</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#        [[0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#         [0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#         [0., 4., 1., 1.],</span></span><br><span class="line"><span class="comment">#         [0., 4., 1., 1.]]])</span></span><br><span class="line"></span><br><span class="line">boxes[mask2.expand_as(boxes)]</span><br><span class="line"><span class="comment">#tensor([1., 4., 5., 2.])</span></span><br></pre></td></tr></table></figure>
+<p>从上面代码可以看出，longtensor对于数组的索引是按照值对应的位置来索引</p>
+<p>而bytetensor索引的位置是当前为非零的位置输出</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/15/python打开文件/" rel="next" title="python打开文件">
+                <i class="fa fa-chevron-left"></i> python打开文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -692,6 +798,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
 
   
 
@@ -702,6 +812,8 @@
 
   
 
+
+  
 
 
   
