@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/photo.jpg?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/photo.jpg?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在深度学习里，尤其是计算机视觉里，很多时候训练集不够充足，或者某一类的数据较少，为了增加训练数据的数量，防止过度拟合，增加模型的鲁棒性，数据增强，data augmentation就应运而生">
+<meta name="keywords" content="DP basic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Augmentation 数据增强">
+<meta property="og:url" content="https://haoyu12s.github.io/2019/04/18/Data-Augmentation-数据增强/index.html">
+<meta property="og:site_name" content="SSS">
+<meta property="og:description" content="在深度学习里，尤其是计算机视觉里，很多时候训练集不够充足，或者某一类的数据较少，为了增加训练数据的数量，防止过度拟合，增加模型的鲁棒性，数据增强，data augmentation就应运而生">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://i.imgur.com/WQEUYsI.png">
+<meta property="og:image" content="https://i.imgur.com/vOwQknl.png">
+<meta property="og:image" content="https://i.imgur.com/BoNFxfB.png">
+<meta property="og:image" content="https://i.imgur.com/Dv20FeW.png">
+<meta property="og:image" content="https://i.imgur.com/rY9uObw.png">
+<meta property="og:image" content="https://i.imgur.com/k0U3360.png">
+<meta property="og:image" content="https://i.imgur.com/oP3APe2.png">
+<meta property="og:updated_time" content="2019-04-19T21:32:49.764Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Augmentation 数据增强">
+<meta name="twitter:description" content="在深度学习里，尤其是计算机视觉里，很多时候训练集不够充足，或者某一类的数据较少，为了增加训练数据的数量，防止过度拟合，增加模型的鲁棒性，数据增强，data augmentation就应运而生">
+<meta name="twitter:image" content="https://i.imgur.com/WQEUYsI.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://haoyu12s.github.io/2019/04/18/Data-Augmentation-数据增强/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Data Augmentation 数据增强 | SSS</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SSS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">No one would help you, only yourself.</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="accessibility.nav_toggle">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>about</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br/>categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/04/18/Data-Augmentation-数据增强/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haoyu"/>
+      <meta itemprop="description" content="Make it come true."/>
+      <meta itemprop="image" content="/images/photo.jpg"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SSS"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Data Augmentation 数据增强
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">post.posted</span>
+              
+
+              
+                
+              
+
+              <time title="post.createdsymbol.colon2019-04-18 16:16:28" itemprop="dateCreated datePublished" datetime="2019-04-18T16:16:28-05:00">2019-04-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">post.edited</span>
+                
+                <time title="post.modifiedsymbol.colon2019-04-19 16:32:49" itemprop="dateModified" datetime="2019-04-19T16:32:49-05:00">2019-04-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">post.in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-learning/" itemprop="url" rel="index"><span itemprop="name">Deep learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             post.viewssymbol.colon 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在深度学习里，尤其是计算机视觉里，很多时候训练集不够充足，或者某一类的数据较少，为了增加训练数据的数量，防止过度拟合，增加模型的鲁棒性，数据增强，data augmentation就应运而生</p>
+<a id="more"></a>
+<h1 id="常见的两种颜色空间"><a href="#常见的两种颜色空间" class="headerlink" title="常见的两种颜色空间"></a>常见的两种颜色空间</h1><ol>
+<li>RGB颜色空间</li>
+<li>HSV颜色空间</li>
+</ol>
+<h2 id="1-RGB颜色空间"><a href="#1-RGB颜色空间" class="headerlink" title="1.RGB颜色空间"></a>1.RGB颜色空间</h2><p>我们生活中常见的显色方式，采用R、G、B三种颜色相加混色的原理， R代表red红色，G代表green绿色，B代表blue蓝色</p>
+<h2 id="2-HSV颜色空间"><a href="#2-HSV颜色空间" class="headerlink" title="2.HSV颜色空间"></a>2.HSV颜色空间</h2><p>HSV在图像处理里的指定颜色分割有较大的作用</p>
+<p>H代表hue色相，也就是什么颜色</p>
+<p>S代表saturation饱和度，也就是颜色的深浅</p>
+<p>V代表value明度，也就是颜色的明亮程度</p>
+<p>有时HSV也会被叫做HSB(brightness)</p>
+<h1 id="常见的几种方式"><a href="#常见的几种方式" class="headerlink" title="常见的几种方式"></a>常见的几种方式</h1><p>图像常用表达格式有两种，RBG（红蓝绿）, HSV（色相-饱和度-明度）</p>
+<ol>
+<li>图像翻转 image flip</li>
+<li>图像缩放 image scale</li>
+<li>图像模糊 image blur</li>
+<li>图像明亮度变换 image bright</li>
+<li>图像色相变换 image hue</li>
+<li>图像饱和度变换 image saturation</li>
+<li>图像平移变换 image shift</li>
+<li>图像裁剪 image crop</li>
+</ol>
+<p>[^boxes]: torch.FloatTensor(),  nx4<br>[^labels]: torch.LongTensor(), 1xn</p>
+<h2 id="1-图像翻转-image-flip"><a href="#1-图像翻转-image-flip" class="headerlink" title="1. 图像翻转 image flip"></a>1. 图像翻转 image flip</h2><p>通过图像水平翻转来实现图像增加</p>
+<p><img src="https://i.imgur.com/WQEUYsI.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_flip</span><span class="params">(selfs, im, boxes)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> random.random() &lt; <span class="number">0.5</span>:</span><br><span class="line">            im_fliped = np.fliplr(im)</span><br><span class="line">            h, w, _ = im.shape</span><br><span class="line">            xmin = w - boxes[:, <span class="number">2</span>]</span><br><span class="line">            xmax = w- boxes[:, <span class="number">0</span>]</span><br><span class="line">            boxes[:, <span class="number">0</span>] = xmin</span><br><span class="line">            boxes[:, <span class="number">2</span>] = xmax</span><br><span class="line">            im = im_fliped</span><br><span class="line">        <span class="keyword">return</span> im, boxes</span><br></pre></td></tr></table></figure>
+<h2 id="2-图像缩放-image-scale"><a href="#2-图像缩放-image-scale" class="headerlink" title="2. 图像缩放 image scale"></a>2. 图像缩放 image scale</h2><p>  <img src="https://i.imgur.com/vOwQknl.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_scale</span><span class="params">(im, boxes)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; <span class="number">0.5</span>:</span><br><span class="line">        print(<span class="string">'here'</span>)</span><br><span class="line">        scale = random.uniform(<span class="number">0.8</span>, <span class="number">2.3</span>)</span><br><span class="line">        height, width, c = im.shape</span><br><span class="line">        im = cv2.resize(im, (int(width*scale), height))</span><br><span class="line">        scale_tensor = torch.FloatTensor([scale, <span class="number">1</span>, scale, <span class="number">1</span>]).expand_as(boxes)</span><br><span class="line">        boxes = boxes * scale_tensor</span><br><span class="line">    <span class="keyword">return</span> im, boxes</span><br></pre></td></tr></table></figure>
+<h2 id="3-图像模糊-image-blur"><a href="#3-图像模糊-image-blur" class="headerlink" title="3. 图像模糊 image blur"></a>3. 图像模糊 image blur</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_blur</span><span class="params">(im)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; <span class="number">0.5</span>:</span><br><span class="line">        im = cv2.blur(im, (<span class="number">5</span>,<span class="number">5</span>))</span><br><span class="line">    <span class="keyword">return</span> im</span><br></pre></td></tr></table></figure>
+<h2 id="4-图像明亮度变换-image-bright"><a href="#4-图像明亮度变换-image-bright" class="headerlink" title="4. 图像明亮度变换 image bright"></a>4. 图像明亮度变换 image bright</h2><p><img src="https://i.imgur.com/BoNFxfB.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_bright</span><span class="params">(im)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> random.random()&lt;<span class="number">0.5</span>:</span><br><span class="line">            hsv = BGR2HSV(im)</span><br><span class="line">            h,s,v = cv2.split(hsv)</span><br><span class="line">            adjust = random.choice([<span class="number">0.5</span>, <span class="number">1.5</span>])</span><br><span class="line">            v = v*adjust</span><br><span class="line">            v = np.clip(v, <span class="number">0</span>, <span class="number">255</span>).astype(hsv.dtype)</span><br><span class="line">            hsv = cv2.merge((h,s,v))</span><br><span class="line">            im = HSV2BGR(hsv)</span><br><span class="line">        <span class="keyword">return</span> im</span><br></pre></td></tr></table></figure>
+<h2 id="5-图像色相变换-image-hue"><a href="#5-图像色相变换-image-hue" class="headerlink" title="5. 图像色相变换 image hue"></a>5. 图像色相变换 image hue</h2><p><img src="https://i.imgur.com/Dv20FeW.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_hue</span><span class="params">(im)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> random.random()&lt;<span class="number">0.5</span>:</span><br><span class="line">        hsv = BGR2HSV(im)</span><br><span class="line">        h,s,v = cv2.split(hsv)</span><br><span class="line">        adjust = random.choice([<span class="number">0.5</span>,<span class="number">1.5</span>])</span><br><span class="line">        h = h * adjust</span><br><span class="line">        h = np.clip(h, <span class="number">0</span>, <span class="number">255</span>).astype(hsv.dtype)</span><br><span class="line">        hsv = cv2.merge((h, s, v))</span><br><span class="line">        im = HSV2BGR(hsv)</span><br><span class="line">    <span class="keyword">return</span> im</span><br></pre></td></tr></table></figure>
+<h2 id="6-图像饱和度变换-image-saturation"><a href="#6-图像饱和度变换-image-saturation" class="headerlink" title="6. 图像饱和度变换 image saturation"></a>6. 图像饱和度变换 image saturation</h2><p><img src="https://i.imgur.com/rY9uObw.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_saturation</span><span class="params">(im)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> random.random()&lt;<span class="number">0.5</span>:</span><br><span class="line">        hsv = BGR2HSV(im)</span><br><span class="line">        h,s,v = cv2.split(hsv)</span><br><span class="line">        adjust = random.choice([<span class="number">0.5</span>,<span class="number">1.5</span>])</span><br><span class="line">        s = s * adjust</span><br><span class="line">        s = np.clip(s, <span class="number">0</span>, <span class="number">255</span>).astype(hsv.dtype)</span><br><span class="line">        hsv = cv2.merge((h, s, v))</span><br><span class="line">        im = HSV2BGR(hsv)</span><br><span class="line">    <span class="keyword">return</span> im</span><br></pre></td></tr></table></figure>
+<h2 id="7-图像平移变换-image-shift"><a href="#7-图像平移变换-image-shift" class="headerlink" title="7. 图像平移变换 image shift"></a>7. 图像平移变换 image shift</h2><p><img src="https://i.imgur.com/k0U3360.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_shift</span><span class="params">(im, boxes, labels)</span>:</span></span><br><span class="line">    center = (boxes[:,:<span class="number">2</span>]+boxes[:,<span class="number">2</span>:])/<span class="number">2</span></span><br><span class="line">    <span class="keyword">if</span> random.random():</span><br><span class="line">        height, width, c = im.shape</span><br><span class="line">        <span class="comment"># print(im.dtype)</span></span><br><span class="line">        shifted_image = np.zeros((height,width,c), dtype=im.dtype)</span><br><span class="line">        shifted_x = random.uniform(-width*<span class="number">0.2</span>, width*<span class="number">0.2</span>)</span><br><span class="line">        shifted_y = random.uniform(-height*<span class="number">0.2</span>, height*<span class="number">0.2</span>)</span><br><span class="line">        <span class="comment"># shifting image</span></span><br><span class="line">        <span class="keyword">if</span> shifted_x&gt;=<span class="number">0</span> <span class="keyword">and</span> shifted_y&gt;=<span class="number">0</span>:</span><br><span class="line">            shifted_image[int(shifted_y):,int(shifted_x):,:] = im[:height-int(shifted_y),:width-int(shifted_x),:]</span><br><span class="line">        <span class="keyword">elif</span> shifted_x&gt;=<span class="number">0</span> <span class="keyword">and</span> shifted_y&lt;<span class="number">0</span>:</span><br><span class="line">            shifted_image[:height+int(shifted_y),int(shifted_x):,:] = im[-int(shifted_y):,:width-int(shifted_x),:]</span><br><span class="line">        <span class="keyword">elif</span> shifted_x &lt;<span class="number">0</span> <span class="keyword">and</span> shifted_y &gt;=<span class="number">0</span>:</span><br><span class="line">            shifted_image[int(shifted_y):,:width+int(shifted_x),:] = im[:height-int(shifted_y),-int(shifted_x):,:]</span><br><span class="line">        <span class="keyword">elif</span> shifted_x&lt;<span class="number">0</span> <span class="keyword">and</span> shifted_y&lt;<span class="number">0</span>:</span><br><span class="line">            shifted_image[:height+int(shifted_y),:width+int(shifted_x),:] = im[-int(shifted_y):,-int(shifted_x):,:]</span><br><span class="line"></span><br><span class="line">        shift_xy = torch.FloatTensor([[int(shifted_x),int(shifted_y)]]).expand_as(center)</span><br><span class="line">        center = center + shift_xy</span><br><span class="line">        mask1 = (center[:,<span class="number">0</span>] &gt;<span class="number">0</span>) &amp; (center[:,<span class="number">0</span>] &lt; width)</span><br><span class="line">        mask2 = (center[:,<span class="number">1</span>] &gt;<span class="number">0</span>) &amp; (center[:,<span class="number">1</span>] &lt; height)</span><br><span class="line">        mask = (mask1 &amp; mask2).view(<span class="number">-1</span>,<span class="number">1</span>)</span><br><span class="line">        boxes_in = boxes[mask.expand_as(boxes)].view(<span class="number">-1</span>,<span class="number">4</span>)</span><br><span class="line">        <span class="keyword">if</span> len(boxes_in) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> im, boxes, labels</span><br><span class="line">        box_shift = torch.FloatTensor([[int(shifted_x),int(shifted_y),int(shifted_x),int(shifted_y)]]).expand_as(boxes_in)</span><br><span class="line">        boxes_in = boxes_in+box_shift</span><br><span class="line">        labels_in = labels[mask.view(<span class="number">-1</span>)]</span><br><span class="line">        <span class="keyword">return</span> shifted_image,boxes_in,labels_in</span><br><span class="line">    <span class="keyword">return</span> im, boxes, labels</span><br></pre></td></tr></table></figure>
+<h2 id="8-图像裁剪-image-crop"><a href="#8-图像裁剪-image-crop" class="headerlink" title="8. 图像裁剪 image crop"></a>8. 图像裁剪 image crop</h2><p><img src="https://i.imgur.com/oP3APe2.png" alt="Imgur"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_crop</span><span class="params">(im, boxes, labels)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; <span class="number">0.5</span>:</span><br><span class="line">        center = (boxes[:, <span class="number">2</span>:] + boxes[:, :<span class="number">2</span>]) / <span class="number">2</span></span><br><span class="line">        height, width, c = im.shape</span><br><span class="line">        h = random.uniform(<span class="number">0.6</span> * height, height)</span><br><span class="line">        w = random.uniform(<span class="number">0.6</span> * width, width)</span><br><span class="line">        x = random.uniform(<span class="number">0</span>, width - w)</span><br><span class="line">        y = random.uniform(<span class="number">0</span>, height - h)</span><br><span class="line">        x, y, h, w = int(x), int(y), int(h), int(w)</span><br><span class="line"></span><br><span class="line">        center = center - torch.FloatTensor([[x, y]]).expand_as(center)</span><br><span class="line">        mask1 = (center[:, <span class="number">0</span>] &gt; <span class="number">0</span>) &amp; (center[:, <span class="number">0</span>] &lt; w)</span><br><span class="line">        mask2 = (center[:, <span class="number">1</span>] &gt; <span class="number">0</span>) &amp; (center[:, <span class="number">1</span>] &lt; h)</span><br><span class="line">        mask = (mask1 &amp; mask2).view(<span class="number">-1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        boxes_in = boxes[mask.expand_as(boxes)].view(<span class="number">-1</span>, <span class="number">4</span>)</span><br><span class="line">        <span class="keyword">if</span> (len(boxes_in) == <span class="number">0</span>):</span><br><span class="line">            <span class="keyword">return</span> im, boxes, labels</span><br><span class="line">        box_shift = torch.FloatTensor([[x, y, x, y]]).expand_as(boxes_in)</span><br><span class="line"></span><br><span class="line">        boxes_in = boxes_in - box_shift</span><br><span class="line">        boxes_in[:, <span class="number">0</span>] = boxes_in[:, <span class="number">0</span>].clamp_(min=<span class="number">0</span>, max=w)</span><br><span class="line">        boxes_in[:, <span class="number">2</span>] = boxes_in[:, <span class="number">2</span>].clamp_(min=<span class="number">0</span>, max=w)</span><br><span class="line">        boxes_in[:, <span class="number">1</span>] = boxes_in[:, <span class="number">1</span>].clamp_(min=<span class="number">0</span>, max=h)</span><br><span class="line">        boxes_in[:, <span class="number">3</span>] = boxes_in[:, <span class="number">3</span>].clamp_(min=<span class="number">0</span>, max=h)</span><br><span class="line"></span><br><span class="line">        labels_in = labels[mask.view(<span class="number">-1</span>)]</span><br><span class="line">        img_croped = im[y:y + h, x:x + w, :]</span><br><span class="line">        <span class="keyword">return</span> img_croped, boxes_in, labels_in</span><br><span class="line">    <span class="keyword">return</span> im, boxes, labels</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DP-basic/" rel="tag"># DP basic</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/16/bytetensor于longtensor对于索引的影响/" rel="next" title="bytetensor于longtensor对于索引的影响">
+                <i class="fa fa-chevron-left"></i> bytetensor于longtensor对于索引的影响
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            sidebar.toc
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            sidebar.overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="haoyu"/>
+            
+              <p class="site-author-name" itemprop="name">haoyu</p>
+              <p class="site-description motion-element" itemprop="description">Make it come true.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">state.posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">state.categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">state.tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/haoyu12S" title="GitHub &rarr; https://github.com/haoyu12S" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常见的两种颜色空间"><span class="nav-number">1.</span> <span class="nav-text">常见的两种颜色空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-RGB颜色空间"><span class="nav-number">1.1.</span> <span class="nav-text">1.RGB颜色空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HSV颜色空间"><span class="nav-number">1.2.</span> <span class="nav-text">2.HSV颜色空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见的几种方式"><span class="nav-number">2.</span> <span class="nav-text">常见的几种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-图像翻转-image-flip"><span class="nav-number">2.1.</span> <span class="nav-text">1. 图像翻转 image flip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-图像缩放-image-scale"><span class="nav-number">2.2.</span> <span class="nav-text">2. 图像缩放 image scale</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-图像模糊-image-blur"><span class="nav-number">2.3.</span> <span class="nav-text">3. 图像模糊 image blur</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-图像明亮度变换-image-bright"><span class="nav-number">2.4.</span> <span class="nav-text">4. 图像明亮度变换 image bright</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-图像色相变换-image-hue"><span class="nav-number">2.5.</span> <span class="nav-text">5. 图像色相变换 image hue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-图像饱和度变换-image-saturation"><span class="nav-number">2.6.</span> <span class="nav-text">6. 图像饱和度变换 image saturation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-图像平移变换-image-shift"><span class="nav-number">2.7.</span> <span class="nav-text">7. 图像平移变换 image shift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-图像裁剪-image-crop"><span class="nav-number">2.8.</span> <span class="nav-text">8. 图像裁剪 image crop</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Haoyu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">footer.powered v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">footer.theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="footer.total_visitors">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="footer.total_views">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
