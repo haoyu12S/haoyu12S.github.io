@@ -4,97 +4,56 @@
 
 
 
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
-<meta name="theme-color" content="#222"/>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.7.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/photo.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/photo.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
-
-<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/photo.jpg?v=7.0.0">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/photo.jpg?v=7.0.0">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
+<script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
     scheme: 'Gemini',
-    version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
     fancybox: false,
-    fastclick: false,
+    mediumzoom: false,
     lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    pangu: false,
     algolia: {
-      applicationID: '',
+      appID: '',
       apiKey: '',
       indexName: '',
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
     }
   };
 </script>
-
-
-  
-
-
-
 
   <meta name="description" content="这篇文章是参考了很多其他人博客得出的自己的一些做法和操作 具体查看 “逗比基地” 主要来源！ “潇湘隐者” “天涯小嘿嘿”">
 <meta name="keywords" content="SSR">
@@ -103,7 +62,7 @@
 <meta property="og:url" content="https://haoyu12s.github.io/2018/06/16/如何搭建SSR服务器和安装客户端/index.html">
 <meta property="og:site_name" content="SSS">
 <meta property="og:description" content="这篇文章是参考了很多其他人博客得出的自己的一些做法和操作 具体查看 “逗比基地” 主要来源！ “潇湘隐者” “天涯小嘿嘿”">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.imgur.com/5OxjNkC.png">
 <meta property="og:image" content="https://i.imgur.com/fEN38ik.png">
 <meta property="og:image" content="https://i.imgur.com/G1Jo0CK.png">
@@ -112,28 +71,22 @@
 <meta name="twitter:title" content="如何搭建SSR服务器和安装客户端">
 <meta name="twitter:description" content="这篇文章是参考了很多其他人博客得出的自己的一些做法和操作 具体查看 “逗比基地” 主要来源！ “潇湘隐者” “天涯小嘿嘿”">
 <meta name="twitter:image" content="https://i.imgur.com/5OxjNkC.png">
+  <link rel="canonical" href="https://haoyu12s.github.io/2018/06/16/如何搭建SSR服务器和安装客户端/">
 
 
-
-
-
-
-  <link rel="canonical" href="https://haoyu12s.github.io/2018/06/16/如何搭建SSR服务器和安装客户端/"/>
-
-
-
-<script id="page.configurations">
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
   };
 </script>
 
   <title>如何搭建SSR服务器和安装客户端 | SSS</title>
   
-
-
-
-
 
 
 
@@ -169,20 +122,14 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta">
-    
 
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
@@ -191,16 +138,12 @@
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-    
-      
         <p class="site-subtitle">No one would help you, only yourself.</p>
       
-    
-    
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="accessibility.nav_toggle">
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -209,113 +152,67 @@
 </div>
 
 
-
 <nav class="site-nav">
   
-    <ul id="menu" class="menu">
+  <ul id="menu" class="menu">
+      
+      
       
         
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
+        <li class="menu-item menu-item-home">
       
     
 
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>home</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
+        <li class="menu-item menu-item-about">
       
     
 
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>about</a>
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
+        <li class="menu-item menu-item-tags">
       
     
 
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>tags</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
+        <li class="menu-item menu-item-categories">
       
     
 
-    
-
-    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br/>categories</a>
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>分类</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
+        <li class="menu-item menu-item-archives">
       
     
 
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>archives</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
+  </ul>
 
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
-
-
-
-  
-
-
-
 </div>
     </header>
 
@@ -325,93 +222,58 @@
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
-          
             
 
-          
-          <div id="content" class="content">
+          <div id="content" class="content page-post-detail">
             
 
   <div id="posts" class="posts-expand">
     
-
-  
-
-  
-  
-  
-
-  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2018/06/16/如何搭建SSR服务器和安装客户端/"/>
+    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2018/06/16/如何搭建SSR服务器和安装客户端/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="haoyu"/>
-      <meta itemprop="description" content="Make it come true."/>
-      <meta itemprop="image" content="/images/photo.jpg"/>
+      <meta itemprop="name" content="haoyu">
+      <meta itemprop="description" content="Make it come true.">
+      <meta itemprop="image" content="/images/photo.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SSS"/>
+      <meta itemprop="name" content="SSS">
     </span>
-
-    
       <header class="post-header">
 
         
-        
           <h1 class="post-title" itemprop="name headline">如何搭建SSR服务器和安装客户端
 
-              
             
           </h1>
         
 
         <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">post.posted</span>
-              
+              <span class="post-meta-item-text">发表于</span>
 
               
                 
               
 
-              <time title="post.createdsymbol.colon2018-06-16 20:13:11 / post.modifiedsymbol.colon21:31:25" itemprop="dateCreated datePublished" datetime="2018-06-16T20:13:11-05:00">2018-06-16</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
+              <time title="创建时间：2018-06-16 20:13:11" itemprop="dateCreated datePublished" datetime="2018-06-16T20:13:11-05:00">2018-06-16</time>
+            </span>
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">post.in</span>
-              
+              <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a></span>
 
@@ -422,38 +284,14 @@
           
 
           
-            
-            
-          
-
-          
-          
-
-          
-            <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
-            <i class="fa fa-eye"></i>
-             post.viewssymbol.colon 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
-            </span>
-          
-
-          
-
-          
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
 
       
         <p>这篇文章是参考了很多其他人博客得出的自己的一些做法和操作</p>
@@ -548,81 +386,62 @@ apt-get install git vim -y
 <hr>
 <h1 id="自己走过的一些坑"><a href="#自己走过的一些坑" class="headerlink" title="自己走过的一些坑"></a>自己走过的一些坑</h1><p>SSR可以说是非常的简单了，但是还是碰到一些问题。<br>阿里云ECS 需要手动开放端口， 比如在服务端我们配置的我们想要的端口，但是你的阿里云是不会自动开启这个端口的，这时，你就需要去阿里云官网手动登陆你的服务器，并且添加开放端口，这里多亏<strong>天涯小嘿嘿</strong>的博客我才知道需要手动开启，之前一直不知道自己错在哪里，连接不上，也通过<strong>潇湘隐者</strong>，了解了一波netstat命令的大致内容。</p>
 
-      
     </div>
 
     
-
     
     
-    
-
-    
-
-    
+        
       
-    
-    
 
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
+      <footer class="post-footer">
           
-            <a href="/tags/SSR/" rel="tag"># SSR</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/15/vpn-ss-ssr-differents/" rel="next" title="vpn/ss/ssr differents">
-                <i class="fa fa-chevron-left"></i> vpn/ss/ssr differents
-              </a>
+          
+          <div class="post-tags">
+            
+              <a href="/tags/SSR/" rel="tag"># SSR</a>
             
           </div>
+        
 
-          <span class="post-nav-divider"></span>
+        
 
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/24/Neural-Networks-and-Deep-Learning-from-coursera/" rel="prev" title="Neural Networks and Deep Learning from coursera">
-                Neural Networks and Deep Learning from coursera <i class="fa fa-chevron-right"></i>
-              </a>
-            
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2018/06/15/vpn-ss-ssr-differents/" rel="next" title="vpn/ss/ssr differents">
+                  <i class="fa fa-chevron-left"></i> vpn/ss/ssr differents
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2018/06/24/Neural-Networks-and-Deep-Learning-from-coursera/" rel="prev" title="Neural Networks and Deep Learning from coursera">
+                  Neural Networks and Deep Learning from coursera <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
           </div>
-        </div>
-      
-
-      
-      
-    </footer>
+        
+      </footer>
+    
   </div>
   
   
   
   </article>
 
-
   </div>
 
 
           </div>
           
 
-  
-
-
-
         </div>
-        
           
   
   <div class="sidebar-toggle">
@@ -634,136 +453,118 @@ apt-get install git vim -y
   </div>
 
   <aside id="sidebar" class="sidebar">
-    
     <div class="sidebar-inner">
-
-      
-
-      
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            sidebar.toc
+            文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            sidebar.overview
+            站点概览
           </li>
         </ul>
       
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
+
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="/images/photo.jpg"
-                alt="haoyu"/>
-            
-              <p class="site-author-name" itemprop="name">haoyu</p>
-              <p class="site-description motion-element" itemprop="description">Make it come true.</p>
-          </div>
+    <img class="site-author-image" itemprop="image"
+      src="/images/photo.jpg"
+      alt="haoyu">
+  <p class="site-author-name" itemprop="name">haoyu</p>
+  <div class="site-description motion-element" itemprop="description">Make it come true.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/haoyu12S" title="GitHub &rarr; https://github.com/haoyu12S" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
 
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">13</span>
-                    <span class="site-state-item-name">state.posts</span>
-                  </a>
-                </div>
-              
 
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">5</span>
-                    <span class="site-state-item-name">state.categories</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">state.tags</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/haoyu12S" title="GitHub &rarr; https://github.com/haoyu12S" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-            </div>
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
 
         </div>
       </div>
-
-      
       <!--noindex-->
         <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
@@ -782,13 +583,11 @@ apt-get install git vim -y
       <!--/noindex-->
       
 
-      
-
     </div>
   </aside>
+  <div id="sidebar-dimmer"></div>
 
 
-        
       </div>
     </main>
 
@@ -799,53 +598,12 @@ apt-get install git vim -y
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Haoyu</span>
-
-  
-
-  
 </div>
-
-
-  <div class="powered-by">footer.powered v3.7.0</div>
-
-
-
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.0</div>
   <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">footer.theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
-
-
-
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
 
         
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="post-meta-item-icon">
-      <i class="fa fa-user"></i>
-    </span>
-    <span class="site-uv" title="footer.total_visitors">
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-    </span>
-  
-
-  
-    <span class="post-meta-divider">|</span>
-  
-
-  
-    <span class="post-meta-item-icon">
-      <i class="fa fa-eye"></i>
-    </span>
-    <span class="site-pv" title="footer.total_views">
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-    </span>
-  
-</div>
-
 
 
 
@@ -857,104 +615,56 @@ apt-get install git vim -y
         
       </div>
     </footer>
-
-    
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
-        
       </div>
-    
 
     
 
-    
-
-    
   </div>
 
   
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
   <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
   <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
 
-  
-
-
-  <script src="/js/src/utils.js?v=7.0.0"></script>
-
-  <script src="/js/src/motion.js?v=7.0.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
 
 
 
-  
-  
-
-
-  <script src="/js/src/affix.js?v=7.0.0"></script>
-
-  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
 
 
 
 
   
-  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
-<script src="/js/src/post-details.js?v=7.0.0"></script>
 
 
 
-  
-
-
-  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
 
 
 
-  
 
 
-  
 
 
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -967,23 +677,11 @@ apt-get install git vim -y
 
   
 
-  
 
   
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>

@@ -4,97 +4,56 @@
 
 
 
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
-<meta name="theme-color" content="#222"/>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.7.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/photo.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/photo.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
-
-<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/photo.jpg?v=7.0.0">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/photo.jpg?v=7.0.0">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
+<script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
     scheme: 'Gemini',
-    version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
     fancybox: false,
-    fastclick: false,
+    mediumzoom: false,
     lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    pangu: false,
     algolia: {
-      applicationID: '',
+      appID: '',
       apiKey: '',
       indexName: '',
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
     }
   };
 </script>
-
-
-  
-
-
-
 
   <meta name="description" content="在做深度学习的图像的localization时，需要画出bounding box和他们的类别名称，这里介绍两种方式  利用PIL中的ImageDraw.rectangle 利用matplotlib.patches 利用openCV">
 <meta name="keywords" content="python">
@@ -103,7 +62,7 @@
 <meta property="og:url" content="https://haoyu12s.github.io/2019/04/22/画Bounding-box的几种方法/index.html">
 <meta property="og:site_name" content="SSS">
 <meta property="og:description" content="在做深度学习的图像的localization时，需要画出bounding box和他们的类别名称，这里介绍两种方式  利用PIL中的ImageDraw.rectangle 利用matplotlib.patches 利用openCV">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.imgur.com/OswVJGW.png">
 <meta property="og:image" content="https://i.imgur.com/XJ3Ppt3.png">
 <meta property="og:image" content="https://i.imgur.com/PUEWy8d.png">
@@ -112,28 +71,22 @@
 <meta name="twitter:title" content="画Bounding box的几种方法">
 <meta name="twitter:description" content="在做深度学习的图像的localization时，需要画出bounding box和他们的类别名称，这里介绍两种方式  利用PIL中的ImageDraw.rectangle 利用matplotlib.patches 利用openCV">
 <meta name="twitter:image" content="https://i.imgur.com/OswVJGW.png">
+  <link rel="canonical" href="https://haoyu12s.github.io/2019/04/22/画Bounding-box的几种方法/">
 
 
-
-
-
-
-  <link rel="canonical" href="https://haoyu12s.github.io/2019/04/22/画Bounding-box的几种方法/"/>
-
-
-
-<script id="page.configurations">
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
   };
 </script>
 
   <title>画Bounding box的几种方法 | SSS</title>
   
-
-
-
-
 
 
 
@@ -169,20 +122,14 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta">
-    
 
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
@@ -191,16 +138,12 @@
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-    
-      
         <p class="site-subtitle">No one would help you, only yourself.</p>
       
-    
-    
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="accessibility.nav_toggle">
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -209,113 +152,67 @@
 </div>
 
 
-
 <nav class="site-nav">
   
-    <ul id="menu" class="menu">
+  <ul id="menu" class="menu">
+      
+      
       
         
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
+        <li class="menu-item menu-item-home">
       
     
 
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>home</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
+        <li class="menu-item menu-item-about">
       
     
 
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>about</a>
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
+        <li class="menu-item menu-item-tags">
       
     
 
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>tags</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
+        <li class="menu-item menu-item-categories">
       
     
 
-    
-
-    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br/>categories</a>
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>分类</a>
 
   </li>
+      
+      
+      
         
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
+        <li class="menu-item menu-item-archives">
       
     
 
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>archives</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
+  </ul>
 
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
-
-
-
-  
-
-
-
 </div>
     </header>
 
@@ -325,105 +222,58 @@
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
-          
             
 
-          
-          <div id="content" class="content">
+          <div id="content" class="content page-post-detail">
             
 
   <div id="posts" class="posts-expand">
     
-
-  
-
-  
-  
-  
-
-  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/04/22/画Bounding-box的几种方法/"/>
+    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/04/22/画Bounding-box的几种方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="haoyu"/>
-      <meta itemprop="description" content="Make it come true."/>
-      <meta itemprop="image" content="/images/photo.jpg"/>
+      <meta itemprop="name" content="haoyu">
+      <meta itemprop="description" content="Make it come true.">
+      <meta itemprop="image" content="/images/photo.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SSS"/>
+      <meta itemprop="name" content="SSS">
     </span>
-
-    
       <header class="post-header">
 
         
-        
           <h1 class="post-title" itemprop="name headline">画Bounding box的几种方法
 
-              
             
           </h1>
         
 
         <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">post.posted</span>
-              
+              <span class="post-meta-item-text">发表于</span>
 
               
                 
               
 
-              <time title="post.createdsymbol.colon2019-04-22 17:47:57" itemprop="dateCreated datePublished" datetime="2019-04-22T17:47:57-05:00">2019-04-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">post.edited</span>
-                
-                <time title="post.modifiedsymbol.colon2019-05-08 16:28:14" itemprop="dateModified" datetime="2019-05-08T16:28:14-05:00">2019-05-08</time>
-              
-            
-          </span>
-
+              <time title="创建时间：2019-04-22 17:47:57" itemprop="dateCreated datePublished" datetime="2019-04-22T17:47:57-05:00">2019-04-22</time>
+            </span>
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">post.in</span>
-              
+              <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-learning/" itemprop="url" rel="index"><span itemprop="name">Deep learning</span></a></span>
 
@@ -434,38 +284,14 @@
           
 
           
-            
-            
-          
-
-          
-          
-
-          
-            <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
-            <i class="fa fa-eye"></i>
-             post.viewssymbol.colon 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
-            </span>
-          
-
-          
-
-          
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
 
       
         <p>在做深度学习的图像的localization时，需要画出bounding box和他们的类别名称，这里介绍两种方式</p>
@@ -482,77 +308,62 @@
 <h1 id="利用openCV"><a href="#利用openCV" class="headerlink" title="利用openCV"></a>利用openCV</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageDraw</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_bbox</span><span class="params">(img, boxes, label, classes)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(boxes)):</span><br><span class="line">        pt1 = (int(boxes[i,<span class="number">0</span>]),int(boxes[i,<span class="number">1</span>]))</span><br><span class="line">        pt2 = (int(boxes[i,<span class="number">2</span>]),int(boxes[i,<span class="number">3</span>]))</span><br><span class="line">        cv2.rectangle(img, pt1, pt2, (<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">        font = cv2.FONT_HERSHEY_SIMPLEX</span><br><span class="line">        cv2.putText(img, classes[label[i]<span class="number">-1</span>], pt1, font, <span class="number">2</span>, (<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>), <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># using Image to show</span></span><br><span class="line">    img_new = Image.fromarray(img)</span><br><span class="line">    img_new.show()</span><br><span class="line">    <span class="comment"># using matplotlib.pyplot</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">img = cv2.imread(<span class="string">'12.jpg'</span>)</span><br><span class="line">boxes = np.array([[<span class="number">304</span>,<span class="number">70</span>,<span class="number">514</span>,<span class="number">386</span>],[<span class="number">547</span>,<span class="number">55</span>,<span class="number">762</span>,<span class="number">360</span>]], dtype=float)</span><br><span class="line">label = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">classes = [<span class="string">'sasiki'</span>, <span class="string">'naruto'</span>]</span><br><span class="line"></span><br><span class="line">img = BGR2RGB(img)</span><br><span class="line">draw_bbox(img, boxes, label, classes)</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.imgur.com/PUEWy8d.png" alt="Imgur"></p>
 
-      
     </div>
 
     
-
     
     
-    
-
-    
-
-    
+        
       
-    
-    
 
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
+      <footer class="post-footer">
           
-            <a href="/tags/python/" rel="tag"># python</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/18/Data-Augmentation-数据增强/" rel="next" title="Data Augmentation 数据增强">
-                <i class="fa fa-chevron-left"></i> Data Augmentation 数据增强
-              </a>
+          
+          <div class="post-tags">
+            
+              <a href="/tags/python/" rel="tag"># python</a>
             
           </div>
+        
 
-          <span class="post-nav-divider"></span>
+        
 
-          <div class="post-nav-prev post-nav-item">
-            
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/04/18/Data-Augmentation-数据增强/" rel="next" title="Data Augmentation 数据增强">
+                  <i class="fa fa-chevron-left"></i> Data Augmentation 数据增强
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/05/09/YOLO-V1笔记/" rel="prev" title="YOLO-V1笔记">
+                  YOLO-V1笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
           </div>
-        </div>
-      
-
-      
-      
-    </footer>
+        
+      </footer>
+    
   </div>
   
   
   
   </article>
 
-
   </div>
 
 
           </div>
           
 
-  
-
-
-
         </div>
-        
           
   
   <div class="sidebar-toggle">
@@ -564,136 +375,118 @@
   </div>
 
   <aside id="sidebar" class="sidebar">
-    
     <div class="sidebar-inner">
-
-      
-
-      
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            sidebar.toc
+            文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            sidebar.overview
+            站点概览
           </li>
         </ul>
       
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
+
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="/images/photo.jpg"
-                alt="haoyu"/>
-            
-              <p class="site-author-name" itemprop="name">haoyu</p>
-              <p class="site-description motion-element" itemprop="description">Make it come true.</p>
-          </div>
+    <img class="site-author-image" itemprop="image"
+      src="/images/photo.jpg"
+      alt="haoyu">
+  <p class="site-author-name" itemprop="name">haoyu</p>
+  <div class="site-description motion-element" itemprop="description">Make it come true.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/haoyu12S" title="GitHub &rarr; https://github.com/haoyu12S" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
 
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">13</span>
-                    <span class="site-state-item-name">state.posts</span>
-                  </a>
-                </div>
-              
 
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">5</span>
-                    <span class="site-state-item-name">state.categories</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">state.tags</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/haoyu12S" title="GitHub &rarr; https://github.com/haoyu12S" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-            </div>
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
 
         </div>
       </div>
-
-      
       <!--noindex-->
         <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
@@ -712,13 +505,11 @@
       <!--/noindex-->
       
 
-      
-
     </div>
   </aside>
+  <div id="sidebar-dimmer"></div>
 
 
-        
       </div>
     </main>
 
@@ -729,53 +520,12 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Haoyu</span>
-
-  
-
-  
 </div>
-
-
-  <div class="powered-by">footer.powered v3.7.0</div>
-
-
-
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.0</div>
   <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">footer.theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
-
-
-
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
 
         
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="post-meta-item-icon">
-      <i class="fa fa-user"></i>
-    </span>
-    <span class="site-uv" title="footer.total_visitors">
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-    </span>
-  
-
-  
-    <span class="post-meta-divider">|</span>
-  
-
-  
-    <span class="post-meta-item-icon">
-      <i class="fa fa-eye"></i>
-    </span>
-    <span class="site-pv" title="footer.total_views">
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-    </span>
-  
-</div>
-
 
 
 
@@ -787,104 +537,56 @@
         
       </div>
     </footer>
-
-    
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
-        
       </div>
-    
 
     
 
-    
-
-    
   </div>
 
   
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
   <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
   <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
 
-  
-
-
-  <script src="/js/src/utils.js?v=7.0.0"></script>
-
-  <script src="/js/src/motion.js?v=7.0.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
 
 
 
-  
-  
-
-
-  <script src="/js/src/affix.js?v=7.0.0"></script>
-
-  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
 
 
 
 
   
-  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
-<script src="/js/src/post-details.js?v=7.0.0"></script>
 
 
 
-  
-
-
-  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
 
 
 
-  
 
 
-  
 
 
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -897,23 +599,11 @@
 
   
 
-  
 
   
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>
