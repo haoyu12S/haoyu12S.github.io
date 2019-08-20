@@ -229,6 +229,96 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/08/20/YOLOv1-decode-method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haoyu">
+      <meta itemprop="description" content="Make it come true.">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SSS">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/08/20/YOLOv1-decode-method/" class="post-title-link" itemprop="url">YOLOv1 decode method</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-08-20 11:12:50" itemprop="dateCreated datePublished" datetime="2019-08-20T11:12:50-05:00">2019-08-20</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-learning/" itemprop="url" rel="index"><span itemprop="name">Deep learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+            <h1 id="YOLOv1-encode-decode-method-YOLO一代的target编码-解码"><a href="#YOLOv1-encode-decode-method-YOLO一代的target编码-解码" class="headerlink" title="YOLOv1 encode, decode method YOLO一代的target编码,解码"></a>YOLOv1 encode, decode method <br>YOLO一代的target编码,解码</h1><h2 id="Code实现"><a href="#Code实现" class="headerlink" title="Code实现"></a>Code实现</h2><h3 id="Encode原理"><a href="#Encode原理" class="headerlink" title="Encode原理"></a>Encode原理</h3><p><img src="https://i.imgur.com/5iteEI0.png?1" alt="Imgur"></p>
+<h3 id="Encode代码"><a href="#Encode代码" class="headerlink" title="Encode代码"></a>Encode代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Preconditioning</span></span><br><span class="line">h,w,_ = img.shape</span><br><span class="line">boxes /= torch.Tensor([w,h,w,h]).expand_as(boxes)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Function</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encoder</span><span class="params">(self,boxes,labels)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        boxes (tensor) [[x1,y1,x2,y2],[]]</span></span><br><span class="line"><span class="string">        labels (tensor) [...]</span></span><br><span class="line"><span class="string">        return 7x7x30</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        grid_num = <span class="number">14</span>  <span class="comment"># The number of grids, 网格数目</span></span><br><span class="line">        target = torch.zeros((grid_num,grid_num,<span class="number">30</span>)) <span class="comment"># Create a grid_num x grid_num x 30 array, 30 means Bx5+classes_num. 创建一个 网格数目x网格数目x30的数组 </span></span><br><span class="line">        cell_size = <span class="number">1.</span>/grid_num</span><br><span class="line">        wh = boxes[:,<span class="number">2</span>:]-boxes[:,:<span class="number">2</span>] <span class="comment"># Caculate ground true box width and height</span></span><br><span class="line">        cxcy = (boxes[:,<span class="number">2</span>:]+boxes[:,:<span class="number">2</span>])/<span class="number">2</span> <span class="comment"># Caculate center x,y. Nx2</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(cxcy.size()[<span class="number">0</span>]): <span class="comment"># Loop from first ground true box to the last. 从第一个ground true box循环到最后一个</span></span><br><span class="line">            cxcy_sample = cxcy[i]</span><br><span class="line">            col_row = (cxcy_sample/cell_size).ceil()<span class="number">-1</span> <span class="comment"># i = column, j = row</span></span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),<span class="number">4</span>] = <span class="number">1</span> <span class="comment"># Set the confidence to 1.</span></span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),<span class="number">9</span>] = <span class="number">1</span> <span class="comment"># Set the confidence to 1.</span></span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),int(labels[i])+<span class="number">9</span>] = <span class="number">1</span> <span class="comment"># Set the class label to 1.</span></span><br><span class="line">            delta_xy = cxcy_sample/cell_size - col_row <span class="comment">#匹配到的网格的左上角相对坐标</span></span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),<span class="number">2</span>:<span class="number">4</span>] = wh[i]</span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),:<span class="number">2</span>] = delta_xy</span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),<span class="number">7</span>:<span class="number">9</span>] = wh[i]</span><br><span class="line">            target[int(col_row[<span class="number">1</span>]),int(col_row[<span class="number">0</span>]),<span class="number">5</span>:<span class="number">7</span>] = delta_xy</span><br><span class="line">        <span class="keyword">return</span> target</span><br></pre></td></tr></table></figure>
+<h3 id="Decode代码"><a href="#Decode代码" class="headerlink" title="Decode代码"></a>Decode代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decoder</span><span class="params">(pred)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    pred (tensor) 1x7x7x30</span></span><br><span class="line"><span class="string">    return (tensor) box[[x1,y1,x2,y2]] label[...]</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    grid_num = <span class="number">14</span></span><br><span class="line">    boxes=[]</span><br><span class="line">    cls_indexs=[]</span><br><span class="line">    probs = []</span><br><span class="line">    cell_size = <span class="number">1.</span>/grid_num</span><br><span class="line">    pred = pred.data</span><br><span class="line">    pred = pred.squeeze(<span class="number">0</span>) <span class="comment">#7x7x30</span></span><br><span class="line">    contain1 = pred[:,:,<span class="number">4</span>].unsqueeze(<span class="number">2</span>)</span><br><span class="line">    contain2 = pred[:,:,<span class="number">9</span>].unsqueeze(<span class="number">2</span>)</span><br><span class="line">    contain = torch.cat((contain1,contain2),<span class="number">2</span>)</span><br><span class="line">    mask1 = contain &gt; <span class="number">0.1</span> <span class="comment">#大于阈值</span></span><br><span class="line">    mask2 = (contain==contain.max()) <span class="comment">#we always select the best contain_prob what ever it&gt;0.9</span></span><br><span class="line">    mask = (mask1+mask2).gt(<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># min_score,min_index = torch.min(contain,2) #每个cell只选最大概率的那个预测框</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(grid_num):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(grid_num):</span><br><span class="line">            <span class="keyword">for</span> b <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">                <span class="comment"># index = min_index[i,j]</span></span><br><span class="line">                <span class="comment"># mask[i,j,index] = 0</span></span><br><span class="line">                <span class="keyword">if</span> mask[i,j,b] == <span class="number">1</span>:</span><br><span class="line">                    <span class="comment">#print(i,j,b)</span></span><br><span class="line">                    box = pred[i,j,b*<span class="number">5</span>:b*<span class="number">5</span>+<span class="number">4</span>]</span><br><span class="line">                    contain_prob = torch.FloatTensor([pred[i,j,b*<span class="number">5</span>+<span class="number">4</span>]])</span><br><span class="line">                    xy = torch.FloatTensor([j,i])*cell_size <span class="comment">#cell左上角  up left of cell</span></span><br><span class="line">                    box[:<span class="number">2</span>] = box[:<span class="number">2</span>]*cell_size + xy <span class="comment"># return cxcy relative to image</span></span><br><span class="line">                    box_xy = torch.FloatTensor(box.size())<span class="comment">#转换成xy形式    convert[cx,cy,w,h] to [x1,xy1,x2,y2]</span></span><br><span class="line">                    box_xy[:<span class="number">2</span>] = box[:<span class="number">2</span>] - <span class="number">0.5</span>*box[<span class="number">2</span>:]</span><br><span class="line">                    box_xy[<span class="number">2</span>:] = box[:<span class="number">2</span>] + <span class="number">0.5</span>*box[<span class="number">2</span>:]</span><br><span class="line">                    max_prob,cls_index = torch.max(pred[i,j,<span class="number">10</span>:],<span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">if</span> float((contain_prob*max_prob)[<span class="number">0</span>]) &gt; <span class="number">0.1</span>:</span><br><span class="line">                        boxes.append(box_xy.view(<span class="number">1</span>,<span class="number">4</span>))</span><br><span class="line">                        cls_indexs.append(cls_index)</span><br><span class="line">                        probs.append(contain_prob*max_prob)</span><br><span class="line">    <span class="keyword">if</span> len(boxes) ==<span class="number">0</span>:</span><br><span class="line">        boxes = torch.zeros((<span class="number">1</span>,<span class="number">4</span>))</span><br><span class="line">        probs = torch.zeros(<span class="number">1</span>)</span><br><span class="line">        cls_indexs = torch.zeros(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        boxes = torch.cat(boxes,<span class="number">0</span>) <span class="comment">#(n,4)</span></span><br><span class="line">        probs = torch.cat(probs,<span class="number">0</span>) <span class="comment">#(n,)</span></span><br><span class="line">        cls_indexs = torch.cat(cls_indexs,<span class="number">0</span>) <span class="comment">#(n,)</span></span><br><span class="line">    keep = nms(boxes,probs)</span><br><span class="line">    <span class="keyword">return</span> boxes[keep],cls_indexs[keep],probs[keep]</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/08/19/Metrics-for-object-detection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1064,105 +1154,6 @@
   </article>
 
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2018/06/16/如何搭建SSR服务器和安装客户端/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="haoyu">
-      <meta itemprop="description" content="Make it come true.">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SSS">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2018/06/16/如何搭建SSR服务器和安装客户端/" class="post-title-link" itemprop="url">如何搭建SSR服务器和安装客户端</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              
-                
-              
-
-              <time title="Created: 2018-06-16 20:13:11" itemprop="dateCreated datePublished" datetime="2018-06-16T20:13:11-05:00">2018-06-16</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这篇文章是参考了很多其他人博客得出的自己的一些做法和操作</p>
-<p>具体查看</p>
-<p><a href="https://doub.io/" target="_blank" rel="noopener">“逗比基地”</a> 主要来源！</p>
-<p><a href="https://www.cnblogs.com/kerrycode/p/5609010.html" target="_blank" rel="noopener">“潇湘隐者”</a></p>
-<p><a href="https://www.cnblogs.com/tianhei/p/7428622.html" target="_blank" rel="noopener">“天涯小嘿嘿”</a></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/06/16/如何搭建SSR服务器和安装客户端/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </section>
 
   
@@ -1203,7 +1194,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
