@@ -66,7 +66,7 @@
 <meta property="og:image" content="https://i.imgur.com/bz6Inba.png">
 <meta property="og:image" content="https://i.imgur.com/4jPWi1o.png">
 <meta property="og:image" content="https://i.imgur.com/5iteEI0.png?1">
-<meta property="og:updated_time" content="2019-08-15T22:11:29.144Z">
+<meta property="og:updated_time" content="2019-08-20T16:08:37.530Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="YOLO-V1笔记">
 <meta name="twitter:description" content="学习YOLO-v1整理的一些笔记">
@@ -316,7 +316,8 @@
 </li>
 <li><p>每个网格有B个Bounding box， 每个box有x,y,w,h预测以外，还有个参数confidence的值，这个值代表了bounding box中是否含有Object，若有，这个预测的可能性有多准确（多大）<br>$$<br>Probability(Object) *IOU\frac{truth}{pred}<br>$$<br>如果Object中心落在这个网格里，Probality(Object)为1，否则为0</p>
 </li>
-<li><p>在test time，将上述公式乘以类的probability<br>$$<br>Probability(Class_i|Object)<em>Probability(Object) </em>IOU\frac{truth}{pred}<br>$$</p>
+<li><p>在test time，将上述公式乘以类的probability </p>
+<p>$$Probability(Class_i|Object)  \ast Probability(Object) \ast IOU\frac{truth}{pred}$$</p>
 </li>
 <li><p>YOLO模型检测回归问题将图片分为了S x S 网格（grid），同时每个网格包含B个bounding box，每个bouding box外加一个参数confidence， 最好是C个classes probabilities。 最终预测的输出格式为 $S \times S \times (B * 5 + C)$ tensor</p>
 </li>
@@ -621,6 +622,56 @@
 
   
 
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
   
 
   
