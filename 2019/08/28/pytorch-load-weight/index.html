@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.7.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/photo.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/photo.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    }
+  };
+</script>
+
+  <meta name="description" content="一些时候我们需要一些基本的网络结构，并且希望它是训练好的，里面的weights都已经训练的差不多，我们只需要继续我们自己的训练就好了，这中情况下，就要学习调用torchvision下训练好的网络结构了。 torchvision.models相关信息">
+<meta name="keywords" content="pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytorch load weight">
+<meta property="og:url" content="https://haoyu12s.github.io/2019/08/28/pytorch-load-weight/index.html">
+<meta property="og:site_name" content="SSS">
+<meta property="og:description" content="一些时候我们需要一些基本的网络结构，并且希望它是训练好的，里面的weights都已经训练的差不多，我们只需要继续我们自己的训练就好了，这中情况下，就要学习调用torchvision下训练好的网络结构了。 torchvision.models相关信息">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-28T22:14:07.773Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pytorch load weight">
+<meta name="twitter:description" content="一些时候我们需要一些基本的网络结构，并且希望它是训练好的，里面的weights都已经训练的差不多，我们只需要继续我们自己的训练就好了，这中情况下，就要学习调用torchvision下训练好的网络结构了。 torchvision.models相关信息">
+  <link rel="canonical" href="https://haoyu12s.github.io/2019/08/28/pytorch-load-weight/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>pytorch load weight | SSS</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SSS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">No one would help you, only yourself.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>Categories</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://haoyu12s.github.io/2019/08/28/pytorch-load-weight/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haoyu">
+      <meta itemprop="description" content="Make it come true.">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SSS">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">pytorch load weight
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-08-28 15:30:44" itemprop="dateCreated datePublished" datetime="2019-08-28T15:30:44-05:00">2019-08-28</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一些时候我们需要一些基本的网络结构，并且希望它是训练好的，里面的weights都已经训练的差不多，我们只需要继续我们自己的训练就好了，这中情况下，就要学习调用torchvision下训练好的网络结构了。</p>
+<p><a href="https://pytorch.org/docs/stable/torchvision/models.html" target="_blank" rel="noopener">torchvision.models相关信息</a></p>
+<a id="more"></a>
+<h2 id="1-torchvision涵盖一下几种网络"><a href="#1-torchvision涵盖一下几种网络" class="headerlink" title="1. torchvision涵盖一下几种网络"></a>1. torchvision涵盖一下几种网络</h2><h3 id="1-1-Classification"><a href="#1-1-Classification" class="headerlink" title="1.1 Classification"></a>1.1 Classification</h3><ul>
+<li><a href="https://arxiv.org/abs/1404.5997" target="_blank" rel="noopener">AlexNet</a></li>
+<li><a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="noopener">VGG</a></li>
+<li><a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="noopener">ResNet</a></li>
+<li><a href="https://arxiv.org/abs/1602.07360" target="_blank" rel="noopener">SqueezeNet</a></li>
+<li><a href="https://arxiv.org/abs/1608.06993" target="_blank" rel="noopener">DenseNet</a></li>
+<li><a href="https://arxiv.org/abs/1512.00567" target="_blank" rel="noopener">Inception</a> v3</li>
+<li><a href="https://arxiv.org/abs/1409.4842" target="_blank" rel="noopener">GoogLeNet</a></li>
+<li><a href="https://arxiv.org/abs/1807.11164" target="_blank" rel="noopener">ShuffleNet</a> v2</li>
+<li><a href="https://arxiv.org/abs/1801.04381" target="_blank" rel="noopener">MobileNet</a> v2</li>
+<li><a href="https://arxiv.org/abs/1611.05431" target="_blank" rel="noopener">ResNeXt</a></li>
+<li><a href="https://pytorch.org/docs/stable/torchvision/models.html#wide-resnet" target="_blank" rel="noopener">Wide ResNet</a></li>
+<li><a href="https://arxiv.org/abs/1807.11626" target="_blank" rel="noopener">MNASNet</a></li>
+</ul>
+<h3 id="1-2-Semantic-Segmentation"><a href="#1-2-Semantic-Segmentation" class="headerlink" title="1.2. Semantic Segmentation"></a>1.2. Semantic Segmentation</h3><ul>
+<li><a href="https://arxiv.org/abs/1411.4038" target="_blank" rel="noopener">FCN ResNet101</a></li>
+<li><a href="https://arxiv.org/abs/1706.05587" target="_blank" rel="noopener">DeepLabV3 ResNet101</a></li>
+</ul>
+<h3 id="1-3-Object-Detection-Instance-Segmentation-and-Person-Keypoint-Detection"><a href="#1-3-Object-Detection-Instance-Segmentation-and-Person-Keypoint-Detection" class="headerlink" title="1.3. Object Detection, Instance Segmentation and Person Keypoint Detection"></a>1.3. Object Detection, Instance Segmentation and Person Keypoint Detection</h3><ul>
+<li><a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener">Faster R-CNN ResNet-50 FPN</a></li>
+<li><a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask R-CNN ResNet-50 FPN</a></li>
+</ul>
+<h2 id="2-Saving-and-loading-models-保存和读取模型"><a href="#2-Saving-and-loading-models-保存和读取模型" class="headerlink" title="2. Saving and loading models    保存和读取模型"></a>2. Saving and loading models<br>    保存和读取模型</h2><p><a href="https://pytorch.org/tutorials/beginner/saving_loading_models.html" target="_blank" rel="noopener">save and load from pytorch website</a></p>
+<h3 id="2-1-基本功能"><a href="#2-1-基本功能" class="headerlink" title="2.1 基本功能"></a>2.1 基本功能</h3><ol>
+<li><p><a href="https://pytorch.org/docs/stable/torch.html?highlight=save#torch.save" target="_blank" rel="noopener">torch.save</a>: Saves a serialized object to disk. This function uses Python’s <a href="https://docs.python.org/3/library/pickle.html" target="_blank" rel="noopener">pickle</a> utility for serialization. Models, tensors, and dictionaries of all kinds of  objects can be saved using this function.<br>储存序列化对象到本地。 模型，tensors值或者字典都可以用这个函数保存。</p>
+</li>
+<li><p><a href="https://pytorch.org/docs/stable/torch.html?highlight=torch load#torch.load" target="_blank" rel="noopener">torch.load</a>: Uses <a href="https://docs.python.org/3/library/pickle.html" target="_blank" rel="noopener">pickle</a>’s unpickling facilities to deserialize pickled object files to memory. This function also facilitates the device to load the data into (see <a href="https://pytorch.org/tutorials/beginner/saving_loading_models.html#saving-loading-model-across-devices" target="_blank" rel="noopener">Saving &amp; Loading Model Across Devices</a>).<br>将用save保存的数据反序列化到内存中。</p>
+</li>
+<li><a href="https://pytorch.org/docs/stable/nn.html?highlight=load_state_dict#torch.nn.Module.load_state_dict" target="_blank" rel="noopener">torch.nn.Module.load_state_dict</a>: Loads a model’s parameter dictionary using a deserialized <em>state_dict</em>. For more information on <em>state_dict</em>, see <a href="https://pytorch.org/tutorials/beginner/saving_loading_models.html#what-is-a-state-dict" target="_blank" rel="noopener">What is a state_dict?</a>. <br>这个函数用来读取储存好的字典。</li>
+</ol>
+<h2 id="3-Load-Weights-Demo"><a href="#3-Load-Weights-Demo" class="headerlink" title="3. Load Weights Demo"></a>3. Load Weights Demo</h2><h3 id="3-1-需求"><a href="#3-1-需求" class="headerlink" title="3.1 需求"></a>3.1 需求</h3><p>首先你要有一个自己的网络结构，并且类似以上任意一个网络或者两个网络的结合，这里以resnet举例。</p>
+<p>我们一般修改网络结构一般会去修改末尾的几层网络，以达到自己的训练目标。</p>
+<h3 id="3-2-Code"><a href="#3-2-Code" class="headerlink" title="3.2 Code"></a>3.2 Code</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torchvison <span class="keyword">import</span> models</span><br><span class="line"><span class="comment"># 首先提取torchvision.models下的网络。</span></span><br><span class="line">resnet = models.resnet50(pretrain=<span class="keyword">True</span>)</span><br><span class="line"><span class="comment"># 网络的权重weights是储存在一个python dictionary字典里的</span></span><br><span class="line">weight_state_dict = resnet.state_dict()</span><br><span class="line"><span class="comment"># 此时我们就获取了这个含有weights的字典</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#假设我们自己的网络是</span></span><br><span class="line">resnet_self = resnet50_self()</span><br><span class="line"><span class="comment"># 同样的我们获取自己网络的weights字典</span></span><br><span class="line">weight_self_state_dict = resnet_self.state_dict()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这是我们就可以根据字典的keys来匹配对应的weights赋值了</span></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> weight_state_dict.keys():</span><br><span class="line">    print(key) <span class="comment"># 检查key的名称</span></span><br><span class="line">    <span class="comment"># 这里检查torchvision.models下权重的key有没有存在于自己网络里</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">in</span> weight_self_state_dict.keys():</span><br><span class="line">        weight_self_state_dict[key] = weight_state_dict[key]</span><br><span class="line">        print(<span class="string">'load weight finished'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># load对应的权重字典</span></span><br><span class="line">resnet.load_state_dict(weight_self_state_dict)</span><br></pre></td></tr></table></figure>
+<p>以上就是一个简单的例子了，同样可以把这种加载方式写成一个函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_pretrain_weights</span><span class="params">(pretrain_dict, selfnet_dict)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> pretrain_dict.keys():</span><br><span class="line">    print(key) <span class="comment"># 检查key的名称</span></span><br><span class="line">    <span class="comment"># 这里检查torchvision.models下权重的key有没有存在于自己网络里</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">in</span> selfnet_dict.keys():</span><br><span class="line">        selfnet_dict[key] = pretrain_dict[key]</span><br><span class="line">        print(<span class="string">'load weight finished'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> selfnet_dict</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/08/26/数学拉丁字母符号读法，写法/" rel="next" title="数学拉丁字母符号读法，写法">
+                  <i class="fa fa-chevron-left"></i> 数学拉丁字母符号读法，写法
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/photo.jpg"
+      alt="haoyu">
+  <p class="site-author-name" itemprop="name">haoyu</p>
+  <div class="site-description motion-element" itemprop="description">Make it come true.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/haoyu12S" title="GitHub &rarr; https://github.com/haoyu12S" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-torchvision涵盖一下几种网络"><span class="nav-number">1.</span> <span class="nav-text">1. torchvision涵盖一下几种网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Classification"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Classification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Semantic-Segmentation"><span class="nav-number">1.2.</span> <span class="nav-text">1.2. Semantic Segmentation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Object-Detection-Instance-Segmentation-and-Person-Keypoint-Detection"><span class="nav-number">1.3.</span> <span class="nav-text">1.3. Object Detection, Instance Segmentation and Person Keypoint Detection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Saving-and-loading-models-保存和读取模型"><span class="nav-number">2.</span> <span class="nav-text">2. Saving and loading models    保存和读取模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-基本功能"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 基本功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Load-Weights-Demo"><span class="nav-number">3.</span> <span class="nav-text">3. Load Weights Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-需求"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Code"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Code</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Haoyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.7.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>
